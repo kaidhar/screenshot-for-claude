@@ -1,0 +1,16 @@
+{
+  "name": "screenshot-for-claude",
+  "owner": {
+    "name": "Kartikay Dhar"
+  },
+  "plugins": [
+    {
+      "name": "screenshot-for-claude",
+      "source": ".",
+      "description": "Paste clipboard screenshots into Claude Code as file references.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["screenshot", "clipboard", "paste", "windows", "macos", "linux"]
+    }
+  ]
+}
