@@ -1,6 +1,6 @@
 {
   "name": "screenshot-for-claude",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Paste clipboard screenshots into Claude Code as file references.",
   "author": {
     "name": "Kartikay Dhar"

@@ -6,9 +6,12 @@
   "plugins": [
     {
       "name": "screenshot-for-claude",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "kaidhar/screenshot-for-claude"
+      },
       "description": "Paste clipboard screenshots into Claude Code as file references.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "productivity",
       "keywords": ["screenshot", "clipboard", "paste", "windows", "macos", "linux"]
     }
