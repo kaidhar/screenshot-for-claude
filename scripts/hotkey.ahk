@@ -1,12 +1,13 @@
-; AutoHotkey v2 hotkey wrapper for screenshot-for-claude.
-; Ctrl+Alt+S: launch Snipping Tool region capture. After capture, image lands
-; on the clipboard. Then run /ss in Claude Code.
+; AutoHotkey v2 hotkey wrapper for screenshot-paste.
 ;
-; Ctrl+Alt+Shift+S: capture region AND immediately dump to disk via the
-; PowerShell helper, copy the path to clipboard, and show a tray tip with it.
+; Hotkeys:
+;   Alt+Shift+S   → region capture, save to PNG, type path into focused window
+;                   (use in Claude Code terminal: it appears as `/ss <path>` ready to send)
+;   Ctrl+Alt+S    → trigger Win+Shift+S only (manual flow)
+;   Ctrl+Alt+Shift+S → capture, save, copy PATH to clipboard, tray tip
 ;
 ; Install: install AutoHotkey v2 (https://www.autohotkey.com/), then double-click
-; this file or add it to shell:startup for autostart.
+; this file or drop a shortcut into shell:startup for autostart.
 
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -18,32 +19,45 @@ TriggerSnip() {
     Send("#+s")  ; Win+Shift+S
 }
 
-^!s::TriggerSnip()
-
-^!+s:: {
+CaptureAndSave() {
     A_Clipboard := ""
     TriggerSnip()
-    if !ClipWait(15, 2) {
-        TrayTip("screenshot-for-claude", "No image captured within 15s.", 0x2)
-        return
+    if !ClipWait(20, 2) {
+        TrayTip("screenshot-paste", "No image captured within 20s.", 0x2)
+        return ""
     }
     try {
-        out := RunWaitCapture('powershell.exe -ExecutionPolicy Bypass -NoProfile -File "' PSScript '"')
-        path := Trim(out, " `r`n`t")
+        shell := ComObject("WScript.Shell")
+        exec  := shell.Exec('powershell.exe -ExecutionPolicy Bypass -NoProfile -File "' PSScript '"')
+        out   := exec.StdOut.ReadAll()
+        path  := Trim(out, " `r`n`t")
         if path != "" && FileExist(path) {
-            A_Clipboard := path
-            TrayTip("screenshot-for-claude", "Saved: " path "`nPath copied to clipboard.", 0x1)
-        } else {
-            TrayTip("screenshot-for-claude", "Helper returned no path.", 0x2)
+            return path
         }
+        TrayTip("screenshot-paste", "Helper returned no path.", 0x2)
     } catch as err {
-        TrayTip("screenshot-for-claude", "Error: " err.Message, 0x2)
+        TrayTip("screenshot-paste", "Error: " err.Message, 0x2)
     }
+    return ""
 }
 
-RunWaitCapture(cmd) {
-    shell := ComObject("WScript.Shell")
-    exec  := shell.Exec(cmd)
-    out   := exec.StdOut.ReadAll()
-    return out
+; Alt+Shift+S — capture + type "/ss <path> " into focused window
+!+s:: {
+    path := CaptureAndSave()
+    if path = ""
+        return
+    ; Type slash command + path. User hits Enter to send.
+    SendText("/ss " path " ")
+}
+
+; Ctrl+Alt+S — just trigger region capture
+^!s::TriggerSnip()
+
+; Ctrl+Alt+Shift+S — capture, save, copy path to clipboard
+^!+s:: {
+    path := CaptureAndSave()
+    if path = ""
+        return
+    A_Clipboard := path
+    TrayTip("screenshot-paste", "Saved: " path "`nPath copied to clipboard.", 0x1)
 }

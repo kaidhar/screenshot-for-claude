@@ -10,13 +10,13 @@ In any Claude Code session:
 
 ```
 /plugin marketplace add kaidhar/screenshot-for-claude
-/plugin install screenshot-for-claude@screenshot-for-claude
+/plugin install screenshot-paste@kaidhar-screenshots
 ```
 
 (Replace `kaidhar` with the GitHub owner if forked.)
 
-Update later: `/plugin marketplace update screenshot-for-claude`.
-Remove: `/plugin uninstall screenshot-for-claude@screenshot-for-claude`.
+Update later: `/plugin marketplace update kaidhar-screenshots`.
+Remove: `/plugin uninstall screenshot-paste@kaidhar-screenshots`.
 
 ### Manual / other harnesses
 
@@ -47,8 +47,11 @@ Clone the repo, then either:
 
 ## Hotkeys (Windows, AutoHotkey v2)
 
-- `Ctrl+Alt+S` → trigger Win+Shift+S region capture.
-- `Ctrl+Alt+Shift+S` → capture region, dump to disk, copy file path to clipboard, tray tip with path.
+Install AutoHotkey v2, double-click `scripts/hotkey.ahk`.
+
+- `Alt+Shift+S` → region capture → save PNG → auto-types `/ss <path> ` into focused window. In Claude Code terminal: just hit Enter to send.
+- `Ctrl+Alt+S` → trigger Win+Shift+S only (manual).
+- `Ctrl+Alt+Shift+S` → capture, save, copy path to clipboard, tray tip.
 
 ## Retention
 
