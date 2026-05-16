@@ -10,13 +10,13 @@ In any Claude Code session:
 
 ```
 /plugin marketplace add kaidhar/screenshot-for-claude
-/plugin install screenshot-paste@kaidhar-screenshots
+/plugin install screenshot-paste@fast-screenshots
 ```
 
 (Replace `kaidhar` with the GitHub owner if forked.)
 
-Update later: `/plugin marketplace update kaidhar-screenshots`.
-Remove: `/plugin uninstall screenshot-paste@kaidhar-screenshots`.
+Update later: `/plugin marketplace update fast-screenshots`.
+Remove: `/plugin uninstall screenshot-paste@fast-screenshots`.
 
 ### Manual / other harnesses
 
